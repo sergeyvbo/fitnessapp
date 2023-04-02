@@ -1,0 +1,83 @@
+@inject IJSRuntime JSRuntime
+@inject DialogService DialogService
+@inject ContextMenuService ContextMenuService
+@inject TooltipService TooltipService
+@inject NotificationService NotificationService
+@using System.Timers
+
+<RadzenLabel Text="@Label" class="h1" />
+<RadzenRow>
+    <RadzenColumn Size="2">
+        <RadzenText Text="@RemainingTime" TextStyle="TextStyle.H3" TagName="TagName.H1">
+        </RadzenText>
+    </RadzenColumn>
+    <RadzenColumn Size="2">
+        <RadzenButton Text="start" Click="@StartCountdown" IsBusy="false" Disabled="_countdownStarted"></RadzenButton>
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    [Parameter]
+    public TimeSpan CountdownTime { get; set; }
+
+    [Parameter]
+    public EventCallback OnCountdownComplete { get; set; }
+
+    [Parameter]
+    public string Label {get;set;}
+
+    private TimeSpan _remainingTime;
+    public string RemainingTime => $"{_remainingTime.Minutes:00}:{_remainingTime.Seconds:00}";
+
+    private bool _countdownStarted;
+    private Timer _timer;
+
+    protected async System.Threading.Tasks.Task Button0Click(Microsoft.AspNetCore.Components.Web.MouseEventArgs args)
+    {
+        await StartCountdown();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _remainingTime = CountdownTime;
+        return Task.CompletedTask;
+    }
+
+    private async Task StartCountdown()
+    {
+        if (_countdownStarted)
+        {
+            return;
+        }
+
+        _countdownStarted = true;
+        
+
+        _timer = new Timer(1000);
+        _timer.Elapsed += Timer_Elapsed;
+        _timer.Start();
+    }
+
+    private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
+    {
+        _remainingTime = _remainingTime.Subtract(TimeSpan.FromSeconds(1));
+        if (_remainingTime <= TimeSpan.Zero)
+        {
+            _timer.Stop();
+            await OnCountdownComplete.InvokeAsync();
+            _countdownStarted = false;
+        }
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    public void Dispose()
+    {
+        if (_timer != null)
+        {
+            _timer.Stop();
+            _timer.Dispose();
+        }
+    }
+
+
+}

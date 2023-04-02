@@ -1,0 +1,57 @@
+@page "/days"
+
+<PageTitle>Days</PageTitle>
+<RadzenStack>
+<RadzenRow AlignItems="AlignItems.Center">
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenText Text="Days" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+            <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+        </RadzenStack>
+    </RadzenColumn>
+</RadzenRow>
+<RadzenRow>
+    <RadzenColumn SizeMD=6>
+    <RadzenCard style="height: 100%">
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px"  AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true"
+            Data="@days"    TItem="Fitnessapp.Models.dev.Day" RowSelect="@EditRow" >
+            <Columns>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Day" Property="id" Title="id">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Day" Property="name" Title="name">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Day" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                    <Template Context="day">
+
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                            Shade="Shade.Lighter" Variant="Variant.Flat"
+                            Click=@(args => GridDeleteButtonClick(args, day)) @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </RadzenCard>
+    </RadzenColumn>
+        <RadzenColumn SizeMD=6>
+        <RadzenCard style="height: 100%;margin-top:0px;">
+            <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Day</RadzenAlert>
+            <RadzenTemplateForm TItem="Fitnessapp.Models.dev.Day" Data="@day" Visible="@(day != null)" Submit="@FormSubmit">
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="name" Component="name" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@day.name" Name="name" />
+                        <RadzenRequiredValidator Component="name" Text="name is required" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick" Visible=false />
+                </RadzenStack>
+            </RadzenTemplateForm>
+        </RadzenCard>
+        </RadzenColumn></RadzenRow>
+</RadzenStack>

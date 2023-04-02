@@ -1,0 +1,31 @@
+@page "/"
+<PageTitle>Index</PageTitle>
+
+    <RadzenDropDown 
+        TValue="int" 
+        ValueProperty="id" 
+        TextProperty="name" 
+        Data="@days" 
+        Style="width: 80%; min-width: 200px; max-width: 400px" 
+        Name="WorkoutDay" 
+        Placeholder="Select the Day"
+        @bind-Value="SelectedDay"/>
+
+@if(SelectedDay != 0)
+{
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenSteps>
+                <Steps>
+                    <RadzenStepsItem Text="Warm Up">
+                        <Countdown CountdownTime="@WarmUpTime" Label="Run!"></Countdown>
+                    </RadzenStepsItem>
+                    <RadzenStepsItem Text="Cool Down">
+                        <Countdown CountdownTime="@CoolDownTime" Label="Stretch!"></Countdown>
+                    </RadzenStepsItem>
+                </Steps>
+            </RadzenSteps>
+        </RadzenColumn>
+    </RadzenRow>
+}
+

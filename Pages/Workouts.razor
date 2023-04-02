@@ -1,0 +1,128 @@
+@page "/workouts"
+
+<PageTitle>Workouts</PageTitle>
+<RadzenStack>
+<RadzenRow AlignItems="AlignItems.Center">
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenText Text="Workouts" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+            <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+        </RadzenStack>
+    </RadzenColumn>
+</RadzenRow>
+<RadzenRow>
+    <RadzenColumn SizeMD=6>
+    <RadzenCard style="height: 100%">
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px"  AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true"
+            Data="@workouts"    TItem="Fitnessapp.Models.dev.Workout" RowSelect="@EditRow" >
+            <Columns>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="id" Title="id">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="weight1" Title="weight1">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="reps1" Title="reps1">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="weight2" Title="weight2">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="reps2" Title="reps2">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="weight3" Title="weight3">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="reps3" Title="reps3">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="date" Title="date">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="Exercise.name" Title="Exercise">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                    <Template Context="workout">
+
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                            Shade="Shade.Lighter" Variant="Variant.Flat"
+                            Click=@(args => GridDeleteButtonClick(args, workout)) @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </RadzenCard>
+    </RadzenColumn>
+        <RadzenColumn SizeMD=6>
+        <RadzenCard style="height: 100%;margin-top:0px;">
+            <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Workout</RadzenAlert>
+            <RadzenTemplateForm TItem="Fitnessapp.Models.dev.Workout" Data="@workout" Visible="@(workout != null)" Submit="@FormSubmit">
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="weight1" Component="weight1" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenNumeric style="display: block; width: 100%" @bind-Value="@workout.weight1" Name="weight1" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="reps1" Component="reps1" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenNumeric style="display: block; width: 100%" @bind-Value="@workout.reps1" Name="reps1" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="weight2" Component="weight2" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenNumeric style="display: block; width: 100%" @bind-Value="@workout.weight2" Name="weight2" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="reps2" Component="reps2" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenNumeric style="display: block; width: 100%" @bind-Value="@workout.reps2" Name="reps2" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="weight3" Component="weight3" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenNumeric style="display: block; width: 100%" @bind-Value="@workout.weight3" Name="weight3" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="reps3" Component="reps3" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenNumeric style="display: block; width: 100%" @bind-Value="@workout.reps3" Name="reps3" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="date" Component="date" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenDatePicker DateFormat="dd/MM/yyyy" style="display: block; width: 100%" @bind-Value="@workout.date" Name="date" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="Exercise" Component="Exercise" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenDropDownDataGrid Data="@exercisesForexerciseId" TextProperty="name" ValueProperty="id"
+                             Placeholder="Choose Exercise" style="display: block; width: 100%" @bind-Value="@workout.exercise_id" Name="exercise_id"
+                               />
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick" Visible=false />
+                </RadzenStack>
+            </RadzenTemplateForm>
+        </RadzenCard>
+        </RadzenColumn></RadzenRow>
+</RadzenStack>
