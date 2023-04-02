@@ -1,4 +1,3 @@
-using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -39,11 +38,27 @@ namespace Fitnessapp.Pages
         protected int SelectedDay;
 
         protected TimeSpan WarmUpTime = TimeSpan.FromMinutes(5);
+        protected TimeSpan ExerciseTime = TimeSpan.FromMinutes(2);
         protected TimeSpan CoolDownTime = TimeSpan.FromMinutes(5);
+        protected IQueryable<Fitnessapp.Models.dev.Exercise> exercises;
 
         protected override async Task OnInitializedAsync()
         {
             days = await devService.GetDays();
+        }
+
+        protected async void WorkoutDaySelectedItemChanged(System.Object args)
+        {
+            if (SelectedDay == 0)
+            {
+                return;
+            }
+            var query = new Query()
+            {
+                Filter = $@"f => f.day_id == @0",
+                FilterParameters = new object[] { SelectedDay }
+            };
+            exercises = await devService.GetExercises(query);
         }
     }
 }
