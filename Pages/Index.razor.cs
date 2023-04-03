@@ -1,3 +1,4 @@
+using Fitnessapp.Models.dev;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -40,8 +41,11 @@ namespace Fitnessapp.Pages
         protected TimeSpan WarmUpTime = TimeSpan.FromMinutes(5);
         protected TimeSpan ExerciseTime = TimeSpan.FromMinutes(2);
         protected TimeSpan CoolDownTime = TimeSpan.FromMinutes(5);
-        protected IQueryable<Fitnessapp.Models.dev.Exercise> exercises;
+        protected IQueryable<Exercise> exercises;
 
+        protected List<Workout> workouts;
+
+        
         protected override async Task OnInitializedAsync()
         {
             days = await devService.GetDays();
@@ -59,6 +63,44 @@ namespace Fitnessapp.Pages
                 FilterParameters = new object[] { SelectedDay }
             };
             exercises = await devService.GetExercises(query);
+
+            var prevWorkouts = await devService.GetLastWorkoutsByDay(SelectedDay);
+            var prevWorkoutsList = prevWorkouts.ToList();
+            workouts = new List<Workout>();
+
+            foreach (var exercise in exercises)
+            {
+                var prevWorkout = prevWorkoutsList.FirstOrDefault(x => x.exercise_id == exercise.id);
+
+                workouts.Add( new Workout {
+                    date = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc),
+                    exercise_id = exercise.id,
+                    weight1 = prevWorkout?.weight1 ?? 0,
+                    weight2 = prevWorkout?.weight2 ?? 0,
+                    weight3 = prevWorkout?.weight3 ?? 0,
+                    reps1 = prevWorkout?.reps1 ?? 0,
+                    reps2 = prevWorkout?.reps2 ?? 0,
+                    reps3 = prevWorkout?.reps3 ?? 0  
+                });
+            }
+           
+            
         }
+
+        protected string ExerciseNameById(int id)
+        {
+            return exercises.ToList().FirstOrDefault(e=>e.id == id).name;
+        }
+
+        protected async void SaveWorkout()
+        {
+            foreach (var workout in workouts)
+            {
+                await devService.CreateWorkout(workout);
+            }
+            
+        }
+
+        
     }
 }

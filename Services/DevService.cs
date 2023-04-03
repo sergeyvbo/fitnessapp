@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Radzen;
 
 using Fitnessapp.Data;
+using Fitnessapp.Models.dev;
 
 namespace Fitnessapp
 {
@@ -97,6 +98,25 @@ namespace Fitnessapp
             return await Task.FromResult(items);
         }
 
+        internal async Task<IQueryable<Workout>> GetLastWorkoutsByDay(int dayId)
+        {
+            var exerciseIds = Context.Exercises
+                .Where(e => e.day_id == dayId);
+
+            var prevWorkoutDate = Context.Workouts
+                .Where(w => exerciseIds.Any(e => e.id == w.exercise_id))
+                .OrderByDescending(w => w.date)
+                .Take(1)
+                .Select(w => w.date)
+                .FirstOrDefault();
+
+            var workouts = Context.Workouts
+                .Where(w => w.date == prevWorkoutDate);
+
+            return await Task.FromResult(workouts);
+
+        }
+
         partial void OnWorkoutGet(Fitnessapp.Models.dev.Workout item);
 
         public async Task<Fitnessapp.Models.dev.Workout> GetWorkoutById(int id)
@@ -129,6 +149,8 @@ namespace Fitnessapp
             {
                throw new Exception("Item already available");
             }            
+
+            workout.date = DateTime.SpecifyKind(workout.date, DateTimeKind.Utc);
 
             try
             {
@@ -586,5 +608,7 @@ namespace Fitnessapp
 
             return itemToDelete;
         }
-        }
+
+        
+    }
 }

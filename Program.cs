@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radzen;
 using Microsoft.EntityFrameworkCore;
+using Fitnessapp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<Fitnessapp.Data.devContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("devConnection"));
 });
 var app = builder.Build();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

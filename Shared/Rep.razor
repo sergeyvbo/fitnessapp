@@ -1,0 +1,56 @@
+@inject IJSRuntime JSRuntime
+@inject DialogService DialogService
+@inject ContextMenuService ContextMenuService
+@inject TooltipService TooltipService
+@inject NotificationService NotificationService
+
+<RadzenRow>
+    <RadzenColumn Size="1" Style="float: right; text-align: right">
+        <RadzenIcon Icon="fitness_center"></RadzenIcon>
+        
+    </RadzenColumn>
+    <RadzenColumn Size="3">
+        <RadzenNumeric 
+            TValue="decimal" 
+            Placeholder="Weight" 
+            @bind-Value="@Weight" 
+            Change="@UpdateWeight"
+            ></RadzenNumeric>
+
+    </RadzenColumn>
+    <RadzenColumn Size="1" Style="text-align: right">
+        <RadzenIcon Icon="replay_10"></RadzenIcon>
+        
+    </RadzenColumn>
+    <RadzenColumn Size="3">
+        <RadzenNumeric 
+            TValue="int" 
+            Placeholder="Repetitions" 
+            @bind-Value="@Repetitions"
+            Change="@UpdateRepetitions"></RadzenNumeric>
+    </RadzenColumn>
+</RadzenRow>
+@code {
+    [Parameter]
+    public decimal Weight { get; set; }
+
+    [Parameter]
+    public EventCallback<decimal> WeightChanged { get; set; }
+
+
+    [Parameter]
+    public int Repetitions { get; set; }
+
+    [Parameter]
+    public EventCallback<int> RepetitionsChanged { get; set; }
+
+    async Task UpdateWeight()
+    {
+        await WeightChanged.InvokeAsync(Weight);
+    }
+    async Task UpdateRepetitions()
+    {
+        await RepetitionsChanged.InvokeAsync(Repetitions);
+    }
+
+}
