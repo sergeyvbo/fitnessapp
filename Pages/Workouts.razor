@@ -13,15 +13,17 @@
     </RadzenColumn>
 </RadzenRow>
 <RadzenRow>
-    <RadzenColumn SizeMD=6>
+    <RadzenColumn SizeMD=12>
     <RadzenCard style="height: 100%">
-        <RadzenDataGrid @ref="grid0" ColumnWidth="200px"  AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true"
+        <RadzenDataGrid @ref="grid0" ColumnWidth="auto"  AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true"
             Data="@workouts"    TItem="Fitnessapp.Models.dev.Workout" RowSelect="@EditRow" >
             <Columns>
-                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="id" Title="id">
-                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="date" Title="date">
+                                                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="Exercise.name" Title="Exercise">
+                                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="weight1" Title="weight1">
-                </RadzenDataGridColumn>
+                                                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="reps1" Title="reps1">
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="weight2" Title="weight2">
@@ -32,10 +34,8 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="reps3" Title="reps3">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="date" Title="date">
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="Exercise.name" Title="Exercise">
-                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Property="id" Title="id">
+                                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Fitnessapp.Models.dev.Workout" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                     <Template Context="workout">
 
@@ -47,6 +47,7 @@
             </Columns>
         </RadzenDataGrid>
     </RadzenCard>
+    </RadzenColumn><RadzenColumn>
     </RadzenColumn>
         <RadzenColumn SizeMD=6>
         <RadzenCard style="height: 100%;margin-top:0px;">
